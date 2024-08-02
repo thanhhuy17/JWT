@@ -53,14 +53,14 @@ const authController = {
     try {
       const user = await User.findOne({ username: req.body.username });
       if (!user) {
-        res.status(404).json("Wrong Username!");
+        return res.status(404).json("Wrong Username!");
       }
       const validPassword = await bcrypt.compare(
         req.body.password,
         user.password
       );
       if (!validPassword) {
-        res.status(404).json("Wrong Password!");
+        return res.status(404).json("Wrong Password!");
       }
       // Check username and password correct => đăng nhập
       if (user && validPassword) {
@@ -117,7 +117,7 @@ const authController = {
     refreshTokens = refreshTokens.filter(
       (token) => token !== req.cookies.refreshToken
     );
-    res.status(200).json("Logged out !");
+    return res.status(200).json("Logged out !");
   },
 };
 
