@@ -27,7 +27,6 @@ const HomePage = () => {
     {
       username: "kellynguyen1122",
     },
-    
   ];
   return (
     <main className="home-container">
