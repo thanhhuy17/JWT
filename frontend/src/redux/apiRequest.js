@@ -7,6 +7,15 @@ import {
   registerSuccess,
 } from "./authSlice";
 import axios from "axios";
+import {
+  deleteUserFalse,
+  deleteUserStart,
+  deleteUserSuccess,
+  getUsersFalse,
+  getUsersStart,
+  getUsersSuccess,
+} from "./userSlice";
+
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
@@ -17,6 +26,7 @@ export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginFailed());
   }
 };
+
 export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
@@ -31,3 +41,34 @@ export const registerUser = async (user, dispatch, navigate) => {
 //1. Get All User
 //2. Delete User
 //3. Log out
+
+export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
+  dispatch(getUsersStart());
+  try {
+    const res = await axiosJWT.get("/v1/user", {
+      headers: { token: `Bearer ${accessToken}` },
+    });
+    dispatch(getUsersSuccess(res.data));
+  } catch (err) {
+    dispatch(getUsersFalse());
+  }
+};
+
+export const deleteUser = async (
+  accessToken,
+  dispatch,
+  userId,
+  navigate,
+  axiosJWT
+) => {
+  dispatch(deleteUserStart());
+  try {
+    const res = await axiosJWT.delete("/v1/user/" + userId, {
+      headers: { token: `Bearer ${accessToken}` },
+    });
+    dispatch(deleteUserSuccess(res.data));
+    // navigate("/register")
+  } catch (err) {
+    dispatch(deleteUserFalse(err.response.data));
+  }
+};
