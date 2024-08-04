@@ -2,6 +2,9 @@ import {
   loginFailed,
   loginStart,
   loginSuccess,
+  logoutFailed,
+  logoutStart,
+  logoutSuccess,
   registerFailed,
   registerStart,
   registerSuccess,
@@ -70,5 +73,25 @@ export const deleteUser = async (
     // navigate("/register")
   } catch (err) {
     dispatch(deleteUserFalse(err.response.data));
+  }
+};
+
+//LOGOUT
+export const logoutUser = async (
+  navigate,
+  id,
+  axiosJWT,
+  dispatch,
+  accessToken
+) => {
+  dispatch(logoutStart());
+  try {
+    await axiosJWT.post("v1/auth/logout", id, {
+      headers: { token: `Bearer ${accessToken}` },
+    });
+    dispatch(logoutSuccess());
+    navigate("/login");
+  } catch (err) {
+    dispatch(logoutFailed(err.response.data));
   }
 };
